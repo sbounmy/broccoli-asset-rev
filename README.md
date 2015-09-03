@@ -59,12 +59,21 @@ var assetNode = new AssetRev(node, {
 ## Ember CLI addon usage
 
 ```js
-var app = new EmberApp({
-  fingerprint: {
-    exclude: ['fonts/169929'],
-    prepend: 'https://sudomain.cloudfront.net/'
-  }
-});
+// ember-cli-build.js as of Ember CLI 1.13.8 Brocfile transition https://github.com/ember-cli/ember-cli/blob/master/TRANSITION.md#brocfile-transition
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+
+  var app = new EmberApp(defaults, {
+    fingerprint: {
+      generateAssetMap: true,
+      exclude: ['fonts/169929'],
+      prepend: 'https://sudomain.cloudfront.net/'
+    }
+  });
+  
+  return app.toTree();
+};
 ```
 
 ## Ember CLI addon options
@@ -74,3 +83,4 @@ var app = new EmberApp({
   - `extensions` - Default: `['js', 'css', 'png', 'jpg', 'gif', 'map']` - The file types to add md5 checksums.
   - `prepend` - Default: `''` - A string to prepend to all of the assets. Useful for CDN urls like `https://subdomain.cloudfront.net/`
   - `replaceExtensions` - Default: `['html', 'css', 'js']` - The file types to replace source code with new checksum file names.
+  - `generateAssetMap` - Default: false. If true, will generate a `assetMap.json` file in a `assets` directory on the output node.
